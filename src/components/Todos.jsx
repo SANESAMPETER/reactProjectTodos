@@ -1,6 +1,14 @@
 import { useState } from "react";
+import Modal from './Modal';
 
 function Todos() {
+
+
+    const [inputValue, setInputValue] = useState('');
+    const [textList, setTextList] = useState([]);
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
     const Title = <h1>Todos App</h1>;
 
     const tableStyle = {
@@ -29,17 +37,12 @@ function Todos() {
         backgroundColor: "#f9f9f9"
     };
 
-    const [inputValue, setInputValue] = useState('');
-    const [textList, setTextList] = useState([]);
-    const [error, setError] = useState(false);
-
 
     function handleInputChange(e) {
         setInputValue(e.target.value);
     }
 
     function addTodos() {
-
         if (inputValue.trim()) {
             setTextList([...textList, {
                 id: Date.now(),
@@ -48,10 +51,13 @@ function Todos() {
             }]);
             setInputValue('');
             setError(false);
+            setErrorMessage('');
         } else {
             setError(true);
+            setErrorMessage('Field should not be empty when submitting');
         }
     }
+
 
     function toggleCheck(id) {
         setTextList(textList.map(item =>
@@ -76,7 +82,7 @@ function Todos() {
                 />
 
                 {error && (
-                    <p style={{ color: 'red' }}>Field should not be empty when submitting</p>
+                    <Modal message={errorMessage} onClose={() => setError(false)} />
                 )}
 
                 <button
